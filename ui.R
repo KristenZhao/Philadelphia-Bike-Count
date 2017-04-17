@@ -29,13 +29,13 @@ dashboardPage(
                        ),
                        box(width = NULL,
                            h3('Bike Counts'),
-                           h4(textOutput("total_crimes"))),
+                           h4(textOutput("total_count"))),
                        box(width = NULL,
-                           h3("Most Common Crime"),
-                           h4(textOutput("common_crime"))),
+                           h3("Most Popular Biking Area"),
+                           h4(textOutput("popular_area"))),
                        box(width = NULL,
-                           h3("Day of the Week with the Most Crime"),
-                           h4(textOutput("weekday_crime")))
+                           h3("Most Popular Biking Neighborhood"),
+                           h4(textOutput("nhood")))
                 )
               )
       ),
@@ -49,17 +49,17 @@ dashboardPage(
                            plotOutput("desc_plot")))
               ),
               fluidRow(
-                column(width = 3,
+                column(width = 6,
                        box(width = NULL,
                            dateRangeInput("date2", "Select dates to visualize.",
-                                          start = "2015-06-01", end = "2015-07-01",
-                                          min = min(crime$CrimeDate), max = max(crime$CrimeDate))
+                                          start = '2016-08-01', end = '2017-04-30',
+                                          min = min(bike_philly$UPDATED), max = max(bike_philly$UPDATED))
                        )
                 )
               )),
       tabItem(tabName = "about",
               fluidRow(
-                column(width = 6,
+                column(width = 12,
                        box(width = NULL,
                            includeMarkdown("about.md")))
               )

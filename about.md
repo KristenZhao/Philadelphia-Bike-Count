@@ -1,10 +1,10 @@
-# Baltimore Crime Browser
+# Philadelphia Bike Count Visualization
 
-This application is an example of a dashboard that can be quickly prototyped
-and deployed in order to visualize crime in Baltimore City. The dashboard
-includes the following features:
+This is a web application for readers to visualize bicycle activities 
+in the City of Phildelphia. This application includes the following 
+features:
 
-1. An interactive map of Baltimore including:
+1. An interactive map of Philadelphia including:
   - Clustered crime events
   - Popup text for each event with crime details
 2. Widgets that provide aggregate summaries of crime events.
@@ -34,7 +34,7 @@ To run this app locally make sure you've installed the R packages mentioned abov
 run:
 
 ```
-shiny::runGitHub("seankross/Baltimore_Crime_Browser")
+shiny::runGitHub("kristenzhao/Philadelphia-Bike-Count")
 ```
 
 

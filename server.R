@@ -14,8 +14,8 @@ shinyServer(function(input, output, session) {
     
     isolate({
       bike_philly %>%
-        filter(UPDATED >= input$date1[1]) %>%
-        filter(UPDATED <= input$date1[2])
+        subset(UPDATED >= as.POSIXlt(input$date1[1])) %>%
+        subset(UPDATED <= as.POSIXlt(input$date1[2]))
     })
   })
   
@@ -26,7 +26,7 @@ shinyServer(function(input, output, session) {
                          "Select dates to visualize.",
                          start = input$date1[1],
                          end = input$date1[2],
-                         min = min(crime$CrimeDate), max = max(crime$CrimeDate))
+                         min = min(bike_philly$UPDATED), max = max(bike_philly$UPDATED))
   })
   
   observe({
@@ -36,16 +36,16 @@ shinyServer(function(input, output, session) {
                          "Select dates to visualize.",
                          start = input$date2[1],
                          end = input$date2[2],
-                         min = min(crime$CrimeDate), max = max(crime$CrimeDate))
+                         min = min(bike_philly$UPDATED), max = max(bike_philly$UPDATED))
   })
   
-  output$crime_map <- renderLeaflet({
-    filtered_crime() %>%
+  output$bike_count_map <- renderLeaflet({
+    filtered_bike() %>%
       leaflet() %>%
-      setView(lng = "-76.6204859", lat = "39.2847064", zoom = 12) %>%
+      setView(lng = "-75.131290", lat = "39.998602", zoom = 11) %>% 
       addTiles() %>%
       addMarkers(clusterOptions = markerClusterOptions(),
-                 popup = ~content) #~ is a leaflet syntax for column
+                 popup = ~popinfo) #~ is a leaflet syntax for column
   })
   
   output$daily_plot <- renderPlot({
@@ -64,15 +64,15 @@ shinyServer(function(input, output, session) {
     ggplot(desc_crime, aes(Description, Total)) + geom_bar(stat = "identity") + coord_flip()
   })
   
-  output$total_crimes <- renderText({
+  output$total_count <- renderText({
     as.character(nrow(filtered_crime()))
   })
   
-  output$common_crime <- renderText({
+  output$popular_area <- renderText({
     names(tail(sort(table(filtered_crime()$Description)), 1))
   })
   
-  output$weekday_crime <- renderText({
+  output$nhood <- renderText({
     names(tail(sort(table(wday(filtered_crime()$CrimeDate, label = TRUE, abbr = FALSE))), 1))
   })
   
