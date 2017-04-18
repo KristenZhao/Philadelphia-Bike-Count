@@ -35,7 +35,7 @@ dashboardPage(
                            h4(textOutput("popular_area"))),
                        box(width = NULL,
                            h3("Most Popular Biking Municipality"),
-                           h4(textOutput("nhood")))
+                           h4(textOutput("muni")))
                 )
               )
       ),

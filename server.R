@@ -56,23 +56,25 @@ shinyServer(function(input, output, session) {
     ggplot(count_per_muni, aes(CrimeDate, count_sum)) + geom_line()
   })
   
-  output$desc_plot <- renderPlot({
-    desc_crime <- filtered_crime() %>%
-      group_by(Description) %>%
-      summarize(Total = n())
-    
-    ggplot(desc_crime, aes(Description, Total)) + geom_bar(stat = "identity") + coord_flip()
-  })
+  # output$desc_plot <- renderPlot({
+  #   desc_crime <- filtered_bike() %>%
+  #     group_by(Description) %>%
+  #     summarize(Total = n())
+  #   
+  #   ggplot(desc_crime, aes(Description, Total)) + geom_bar(stat = "identity") + coord_flip()
+  # })
   
   output$total_count <- renderText({
-    as.character(sum(filtered_bike$AADB))
+    #as.character(class(filtered_bike()))
+    as.character(sum(filtered_bike()$AADB))
   })
   
   output$popular_area <- renderText({
-    names(tail(sort(table(filtered_crime()$Description)), 1))
+    names(tail(sort(table(filtered_bike()$Description)), 1))
+    filtered_bike()$MUN_NAME[which(filtered_bike()$)]
   })
   
-  output$nhood <- renderText({
+  output$muni <- renderText({
     names(tail(sort(table(wday(filtered_crime()$CrimeDate, label = TRUE, abbr = FALSE))), 1))
   })
   
