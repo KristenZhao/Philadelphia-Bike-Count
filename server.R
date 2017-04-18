@@ -22,7 +22,7 @@ shinyServer(function(input, output, session) {
   observe({
     input$date1 # any change on map will update in ggplot
     
-    updateDateRangeInput(session, "date2",
+    updateDateRangeInput(session, "date1",
                          "Select dates to visualize.",
                          start = input$date1[1],
                          end = input$date1[2],
@@ -32,7 +32,7 @@ shinyServer(function(input, output, session) {
   observe({
     input$date2 #any change in ggplot will reflect on map
     
-    updateDateRangeInput(session, "date1",
+    updateDateRangeInput(session, "date2",
                          "Select dates to visualize.",
                          start = input$date2[1],
                          end = input$date2[2],
@@ -48,12 +48,12 @@ shinyServer(function(input, output, session) {
                  popup = ~popinfo) #~ is a leaflet syntax for column
   })
   
-  output$daily_plot <- renderPlot({
-    daily_crime <- filtered_crime() %>%
-      group_by(CrimeDate) %>%
-      summarize(Crimes_Per_Day = n())
+  output$count_by_muni <- renderPlot({
+    count_per_muni <- filtered_bike() %>%
+      group_by(MUN_NAME) %>%
+      summarize(count_sum = sum(AADB))
     
-    ggplot(daily_crime, aes(CrimeDate, Crimes_Per_Day)) + geom_line()
+    ggplot(count_per_muni, aes(CrimeDate, count_sum)) + geom_line()
   })
   
   output$desc_plot <- renderPlot({
@@ -65,7 +65,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$total_count <- renderText({
-    as.character(nrow(filtered_crime()))
+    as.character(sum(filtered_bike$AADB))
   })
   
   output$popular_area <- renderText({

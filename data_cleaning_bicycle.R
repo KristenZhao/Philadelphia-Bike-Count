@@ -22,6 +22,10 @@ bike_philly <- bike%>%
 bike_philly$UPDATED <- as.POSIXlt(bike_philly$UPDATED, format = "%Y%m%d %H:%M:%S", tz = "UTC") %>%
   trunc('days')
 head(bike_philly$UPDATED)
+bike_philly$MUN_NAME %<>% as.factor()
+bike_philly$TOLMT %<>% as.factor()
+bike_philly$CNTDIR %<>% as.factor()
+str(bike_philly)
 # bike_philly$update_date <- gsub(pattern = "(\\d{4}-\\d{2}-\\d{2}).*", replacement = "\\1",x=bike_philly$UPDATED) %>%
 #   as.Date.factor(format = "%Y-%m-%d")
 # head(bike_philly$update_date)
