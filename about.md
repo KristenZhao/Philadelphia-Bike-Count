@@ -29,6 +29,7 @@ The following R Packages are used to render this app:
 - leaflet
 - ggplot2
 - lubridate
+- plotly
 
 To run this app locally make sure you've installed the R packages mentioned above, then
 run:

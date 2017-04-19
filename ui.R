@@ -4,6 +4,7 @@ library(shinydashboard)
 library(leaflet)
 library(shinythemes)
 library(shinytoastr)
+library(plotly)
 
 #theme = shinythemes::shinytheme("slate")
 dashboardPage(
@@ -14,7 +15,7 @@ dashboardPage(
       menuItem("Map of Philadelphia", tabName = "map", icon = icon("map")),
       menuItem("Graphs & Metrics", tabName = "graphs", icon = icon("signal", lib = "glyphicon")),
       menuItem("About", tabName = "about", icon = icon("question-circle")),
-      menuItem("Source Code", href = "http://github.com/kristenzhao", icon = icon("github-alt"))
+      menuItem("Source Code", href = "https://github.com/KristenZhao/Philadelphia-Bike-Count", icon = icon("github-alt"))
     )
   ),
   dashboardBody(
@@ -47,7 +48,7 @@ dashboardPage(
               fluidRow(
                 column(width = 12,
                        box(width = NULL,
-                           plotOutput("count_by_muni")))
+                           plotlyOutput("count_by_muni")))
                 # column(width = 6,
                 #        box(width = NULL,
                 #            plotOutput("count_by_muni_per_dir")))
@@ -61,7 +62,7 @@ dashboardPage(
                        )
                 ),
                 column(width = 6,
-                       box(width = NULL,
+                       box(width = NULL, 
                            selectInput("CNTDIR", "Which direction are you looking at?", #'county' is an ID, it is to help you keep organized. can be any other names
                                        choices = c('all','both','east','north','south','west'))
                        )

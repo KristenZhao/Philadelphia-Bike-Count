@@ -6,6 +6,7 @@ library(shiny)
 library(dplyr)
 library(leaflet)
 library(ggplot2)
+library(plotly)
 library(lubridate)
 
 direction_subset = function(dataset,direc){
@@ -20,12 +21,12 @@ direction_subset = function(dataset,direc){
 shinyServer(function(input, output, session) {
   filtered_bike <- reactive({
     input$date1
-    
+    input$CNTDIR
     isolate({
       bike_philly %>%
         subset(UPDATED >= as.POSIXlt(input$date1[1])) %>%
         subset(UPDATED <= as.POSIXlt(input$date1[2])) %>%
-        direction_subset(as.character(input$date1))
+        direction_subset(as.character(input$CNTDIR))
     })
   })
   
@@ -49,11 +50,11 @@ shinyServer(function(input, output, session) {
                          min = min(bike_philly$UPDATED), max = max(bike_philly$UPDATED))
   })
   
-  observe({
-    input$CNTDIR
-    updateSelectInput(session,'CNTDIR','Choose a direction',
-                      choices = c('all','both','east','north','south','west'))
-  })
+  # observe({
+  #   input$CNTDIR
+  #   updateSelectInput(session,'CNTDIR','Choose a direction',
+  #                     choices = c('all','both','east','north','south','west'))
+  # })
   
   output$bike_count_map <- renderLeaflet({
     filtered_bike() %>%
@@ -64,16 +65,20 @@ shinyServer(function(input, output, session) {
                  popup = ~popinfo) #~ is a leaflet syntax for column
   })
   
-  output$count_by_muni <- renderPlot({
+  output$count_by_muni <- renderPlotly({
     count_per_muni <- filtered_bike() %>%
       select(-UPDATED) %>%
       group_by(MUN_NAME) %>%
       summarize(count_sum = sum(AADB))
-    ggplot(count_per_muni, aes(reorder(MUN_NAME,-count_sum), count_sum)) + 
+    # use plotly to plot. 
+    plot1 <- ggplot(count_per_muni, aes(x=reorder(MUN_NAME,-count_sum), y=count_sum, text = paste('count:',count_sum))) + 
       geom_bar(stat = 'identity',aes(fill=MUN_NAME)) +
       labs(title = 'Bike Counts per Municipalities', x="Municipality names",y="Bike counts") +
       theme_gray() + theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position="none")
+    ggplotly(plot1) %>%
+      layout(annotations = 'good')
   })
+  #plotlyOutput('count_by_muni')
   
   # output$count_by_muni_per_dir <- renderPlot({
   #   count_per_muni2 <- filtered_bike() %>%
