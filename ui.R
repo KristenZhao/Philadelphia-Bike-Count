@@ -2,8 +2,12 @@
 library(shiny)
 library(shinydashboard)
 library(leaflet)
+library(shinythemes)
+library(shinytoastr)
 
+#theme = shinythemes::shinytheme("slate")
 dashboardPage(
+  skin = 'purple',
   dashboardHeader(title = "Philadelphia Bike Count", titleWidth = 250),
   dashboardSidebar(
     sidebarMenu(
@@ -41,12 +45,12 @@ dashboardPage(
       ),
       tabItem(tabName = "graphs",
               fluidRow(
-                column(width = 6,
+                column(width = 12,
                        box(width = NULL,
-                           plotOutput("count_by_muni"))),
-                column(width = 6,
-                       box(width = NULL,
-                           plotOutput("desc_plot")))
+                           plotOutput("count_by_muni")))
+                # column(width = 6,
+                #        box(width = NULL,
+                #            plotOutput("count_by_muni_per_dir")))
               ),
               fluidRow(
                 column(width = 6,
@@ -54,6 +58,12 @@ dashboardPage(
                            dateRangeInput("date2", "Select dates to visualize.",
                                           start = min(bike_philly$UPDATED), end = max(bike_philly$UPDATED),
                                           min = min(bike_philly$UPDATED), max = max(bike_philly$UPDATED))
+                       )
+                ),
+                column(width = 6,
+                       box(width = NULL,
+                           selectInput("CNTDIR", "Which direction are you looking at?", #'county' is an ID, it is to help you keep organized. can be any other names
+                                       choices = c('all','both','east','north','south','west'))
                        )
                 )
               )),
