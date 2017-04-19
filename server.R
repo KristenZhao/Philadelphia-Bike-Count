@@ -9,11 +9,12 @@ library(ggplot2)
 library(lubridate)
 
 direction_subset = function(dataset,direc){
-  if (direc != 'all'){
-    dataset %<>% 
+  if (direc == 'west'|direc == 'both'|direc=='east'|direc=='north'|direc=='south'){
+    dataset %>% 
       subset(CNTDIR==direc)
+  } else {
+    return(dataset)
   }
-  return(dataset)
 }
 
 shinyServer(function(input, output, session) {
@@ -23,8 +24,8 @@ shinyServer(function(input, output, session) {
     isolate({
       bike_philly %>%
         subset(UPDATED >= as.POSIXlt(input$date1[1])) %>%
-        subset(UPDATED <= as.POSIXlt(input$date1[2])) 
-        #direction_subset(as.character(input$date1))
+        subset(UPDATED <= as.POSIXlt(input$date1[2])) %>%
+        direction_subset(as.character(input$date1))
     })
   })
   
